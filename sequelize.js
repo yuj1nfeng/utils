@@ -20,6 +20,7 @@ const sequelize = new Sequelize({
 });
 
 const defineModels = async () => {
+    if (await fs.exists(models_dir) === false) return;
     const files = (await fs.readdir(models_dir)).filter((file) => file.endsWith('.yml'));
     for (const file_name of files) {
         const str = await fs.readFile(`${models_dir}/${file_name}`, { encoding: 'utf-8' });

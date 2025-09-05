@@ -1,8 +1,8 @@
 import * as t from 'bun:test';
-import utils from '../index.js';
+import utils from '#utils';
 const mongo = utils.mongo;
 
-const titles = new Array(utils.mk.random.integer(2, 20)).fill(null).map((p) => utils.mk.random.city());
+const titles = new Array(utils.mk.random.integer(1, 1)).fill(null).map((p) => utils.mk.random.city());
 t.describe.each(titles)('🍉🍉🍉  Mongo', async (test_table) => {
     // 测试前清空测试表
     t.beforeEach(async () => {

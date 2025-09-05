@@ -1,5 +1,5 @@
 import * as t from 'bun:test';
-import utils from '../index.js';
+import utils from '#utils';
 const s3 = utils.s3;
 
 t.describe('S3', async () => {

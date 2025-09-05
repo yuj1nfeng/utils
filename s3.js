@@ -135,8 +135,18 @@ async function list(prefix = '', maxKeys = 1000) {
  * @returns {Promise<Object>} 删除结果
  */
 async function del(key) {
-    const result = await client.delete(key);
-    return result;
+    await client.delete(key);
+
+}
+
+/**
+ * 删除文件
+ * @param {string} key 文件在S3中的key
+ * @returns {Promise<Object>} 删除结果
+ */
+async function unlink(key) {
+    await client.unlink(key);
+
 }
 
 // 导出所有方法
@@ -150,4 +160,5 @@ export default {
     stat,
     list,
     del,
+    unlink,
 };

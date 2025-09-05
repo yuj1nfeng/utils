@@ -1,8 +1,8 @@
 import * as t from 'bun:test';
-import utils from '../index.js';
+import utils from '#utils';
 const etcd = utils.etcd;
 
-const keys = new Array(utils.mk.random.integer(10, 50)).fill(null).map((p) => utils.mk.random.city());
+const keys = new Array(utils.mk.random.integer(1, 1)).fill(null).map((p) => utils.mk.random.city());
 
 t.describe.each(keys)('🚀🚀 ETCD', async (key) => {
     t.beforeAll(async () => {

@@ -33,7 +33,7 @@ Etcd 分布式键值存储客户端工具。
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 存储数据
 await utils.etcd.put('config/app', JSON.stringify({ name: 'myapp', version: '1.0.0' }));
@@ -53,7 +53,7 @@ try {
 ```
 
 ````javascript
-import utils from 'utils';
+import utils from '#utils';
 
 
 
@@ -81,7 +81,7 @@ MongoDB 数据库操作工具。
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 插入文档
 await utils.mongo.insertOne('users', {
@@ -141,7 +141,7 @@ RabbitMQ 消息队列操作工具，支持生产者和消费者模式。
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 生产者示例
 const producer = new utils.rabbit.RabbitMQProducer();
@@ -172,7 +172,7 @@ Redis 内存数据库客户端工具（基于 Bun 的 Redis 模块）。
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 设置键值
 await utils.redis.set('key', 'value');
@@ -211,7 +211,7 @@ console.log('User:', user);
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 上传文件
 await utils.s3.uploadFile('my-bucket', 'path/to/file.txt', './local/file.txt');
@@ -236,7 +236,7 @@ Sequelize ORM 配置工具，支持从 YAML 文件定义模型。
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 获取 Sequelize 实例
 const sequelize = utils.sequelize;
@@ -272,7 +272,7 @@ console.log('Users:', users);
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 发送验证码短信
 await utils.sms.send('+8613800138000', '12345', ['123456']);
@@ -294,7 +294,7 @@ SQL DDL 语句生成工具，支持创建表、添加列、修改列等操作。
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 生成创建表SQL
 const createSql = utils.sql.generateCreateTableSql('users', [
@@ -324,7 +324,7 @@ YAML 规则验证工具，基于 JSON Schema 验证数据格式。
 #### 使用示例
 
 ```javascript
-import utils from 'utils';
+import utils from '#utils';
 
 // 创建验证器
 const validate = utils.createYamlValidator('./validation-rules.yml');
