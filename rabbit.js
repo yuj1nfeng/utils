@@ -1,6 +1,6 @@
 import amqplib from 'amqplib';
 
-if (!process.env['RABBITMQ_URL']) throw new Error('environment variable RABBITMQ_URL is not set');
+// if (!process.env['RABBITMQ_URL']) throw new Error('environment variable RABBITMQ_URL is not set');
 
 let connection = null;
 let channels = new Map();
@@ -233,9 +233,9 @@ class RabbitMQConsumer {
         try {
             // 确保队列存在
             await assertQueue(queueName, options.queueOptions || {});
-            
+
             const channel = await getChannel(queueName);
-            
+
             // 消费消息
             await channel.consume(queueName, async (msg) => {
                 if (msg !== null) {

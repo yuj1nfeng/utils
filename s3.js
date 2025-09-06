@@ -1,11 +1,11 @@
 import { S3Client } from 'bun';
 
 // 检查必要的腾讯云S3环境变量是否已设置
-if (!process.env['S3_ACCESS_KEY']) throw new Error('未设置环境变量 S3_ACCESS_KEY');
-if (!process.env['S3_SECRET_KEY']) throw new Error('未设置环境变量 S3_SECRET_KEY');
-if (!process.env['S3_BUCKET']) throw new Error('未设置环境变量 S3_BUCKET');
-if (!process.env['S3_REGION']) throw new Error('未设置环境变量 S3_REGION');
-if (!process.env['S3_ENDPOINT']) throw new Error('未设置环境变量 S3_ENDPOINT');
+// if (!process.env['S3_ACCESS_KEY']) throw new Error('未设置环境变量 S3_ACCESS_KEY');
+// if (!process.env['S3_SECRET_KEY']) throw new Error('未设置环境变量 S3_SECRET_KEY');
+// if (!process.env['S3_BUCKET']) throw new Error('未设置环境变量 S3_BUCKET');
+// if (!process.env['S3_REGION']) throw new Error('未设置环境变量 S3_REGION');
+// if (!process.env['S3_ENDPOINT']) throw new Error('未设置环境变量 S3_ENDPOINT');
 
 /**
  * 创建 S3客户端实例
