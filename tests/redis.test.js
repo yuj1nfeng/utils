@@ -1,5 +1,5 @@
 import * as t from 'bun:test';
-import utils from '#utils';
+import utils from '../index.js';
 const redis = utils.redis;
 
 t.describe('🚩🚩🚩 Redis', async () => {

@@ -1,5 +1,5 @@
 import * as t from 'bun:test';
-import utils from '#utils';
+import utils from '../index.js';
 const sql = utils.sql;
 
 // 模拟生成用户数据

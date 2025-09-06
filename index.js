@@ -13,6 +13,8 @@ import logger from './logger.js';
 import buildSeqFilter from './cmd/seq.filter.js';
 import buildMongoFilter from './cmd/mongo.filter.js';
 import genZodSchema from './cmd/gen.zod.schema.js';
+import genSeqSchema from './cmd/gen.seq.schema.js';
+import genMockTemplate from './cmd/gen.mock.template.js';
 
 export default {
     etcd,
@@ -31,5 +33,7 @@ export default {
         buildSeqFilter,
         buildMongoFilter,
         genZodSchema,
+        genSeqSchema,
+        genMockTemplate
     },
 };

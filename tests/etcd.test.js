@@ -1,5 +1,5 @@
 import * as t from 'bun:test';
-import utils from '#utils';
+import utils from '../index.js';
 const etcd = utils.etcd;
 
 const keys = new Array(utils.mk.random.integer(1, 1)).fill(null).map((p) => utils.mk.random.city());

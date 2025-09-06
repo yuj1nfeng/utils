@@ -1,5 +1,5 @@
 import * as t from 'bun:test';
-import utils from '#utils';
+import utils from '../index.js';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import validator from 'validator';

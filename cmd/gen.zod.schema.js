@@ -11,6 +11,9 @@ export default async (model_dir, output_dir) => {
         const { attributes } = yaml.parse(content);
         const list = [];
         for (const attr in attributes) {
+
+            if (attr === 'id') continue;
+
             const [t, l] = attributes[attr].type.toUpperCase().split('(');
 
             const len = parseInt(l) || null;
