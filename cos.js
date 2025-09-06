@@ -1,11 +1,11 @@
 import { S3Client } from 'bun';
 
 // 检查必要的腾讯云COS环境变量是否已设置
-if (!process.env['TENCENT_CLOUD_SECRET_ID']) throw new Error('未设置环境变量 TENCENT_CLOUD_SECRET_ID');
-if (!process.env['TENCENT_CLOUD_SECRET_KEY']) throw new Error('未设置环境变量 TENCENT_CLOUD_SECRET_KEY');
-if (!process.env['TENCENT_CLOUD_COS_BUCKET']) throw new Error('未设置环境变量 TENCENT_CLOUD_COS_BUCKET');
-if (!process.env['TENCENT_CLOUD_COS_REGION']) throw new Error('未设置环境变量 TENCENT_CLOUD_COS_REGION');
-if (!process.env['TENCENT_CLOUD_COS_ENDPOINT']) throw new Error('未设置环境变量 TENCENT_CLOUD_COS_ENDPOINT');
+// if (!process.env['TENCENT_CLOUD_SECRET_ID']) throw new Error('未设置环境变量 TENCENT_CLOUD_SECRET_ID');
+// if (!process.env['TENCENT_CLOUD_SECRET_KEY']) throw new Error('未设置环境变量 TENCENT_CLOUD_SECRET_KEY');
+// if (!process.env['TENCENT_CLOUD_COS_BUCKET']) throw new Error('未设置环境变量 TENCENT_CLOUD_COS_BUCKET');
+// if (!process.env['TENCENT_CLOUD_COS_REGION']) throw new Error('未设置环境变量 TENCENT_CLOUD_COS_REGION');
+// if (!process.env['TENCENT_CLOUD_COS_ENDPOINT']) throw new Error('未设置环境变量 TENCENT_CLOUD_COS_ENDPOINT');
 
 /**
  * 创建腾讯云COS S3客户端实例
