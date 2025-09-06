@@ -1,10 +1,10 @@
 import { sms } from 'tencentcloud-sdk-nodejs';
 
-if (!process.versions?.bun) (await import('dotenv')).config();
-if (!process.env['TENCENT_CLOUD_SECRET_ID']) throw new Error('environment variable TENCENT_CLOUD_SECRET_ID is not set');
-if (!process.env['TENCENT_CLOUD_SECRET_KEY']) throw new Error('environment variable TENCENT_CLOUD_SECRET_KEY is not set');
-if (!process.env['TENCENT_CLOUD_SMS_REGION']) throw new Error('environment variable TENCENT_CLOUD_SMS_REGION is not set');
-if (!process.env['TENCENT_CLOUD_SMS_SDK_APP_ID']) throw new Error('environment variable TENCENT_CLOUD_SMS_SDK_APP_ID is not set');
+// if (!process.versions?.bun) (await import('dotenv')).config();
+// if (!process.env['TENCENT_CLOUD_SECRET_ID']) throw new Error('environment variable TENCENT_CLOUD_SECRET_ID is not set');
+// if (!process.env['TENCENT_CLOUD_SECRET_KEY']) throw new Error('environment variable TENCENT_CLOUD_SECRET_KEY is not set');
+// if (!process.env['TENCENT_CLOUD_SMS_REGION']) throw new Error('environment variable TENCENT_CLOUD_SMS_REGION is not set');
+// if (!process.env['TENCENT_CLOUD_SMS_SDK_APP_ID']) throw new Error('environment variable TENCENT_CLOUD_SMS_SDK_APP_ID is not set');
 
 /* 实例化要请求产品(以sms为例)的client对象 */
 const client = new sms.v20210111.Client({
