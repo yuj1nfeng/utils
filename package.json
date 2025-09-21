@@ -16,7 +16,7 @@
         "#utils": "./index.js"
     },
     "devDependencies": {
-        "@types/bun": "latest"
+        "@types/bun": "^1.2.22"
     },
     "dependencies": {
         "@sequelize/core": "^7.0.0-alpha.46",
