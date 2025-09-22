@@ -145,7 +145,6 @@ async function del(key) {
 async function unlink(key) {
     await client.unlink(key);
 }
-
 // 导出所有方法
 export default {
     client,
