@@ -15,5 +15,10 @@ const sequelize = new Sequelize({
     url: process.env['SEQUELIZE_URL'],
     dialect: process.env['SEQUELIZE_DIALECT'],
     logging: logging,
+    hooks: {
+        beforeConnect: (e) => {
+            e.host = e.host.replace(/\[|\]/g, '');
+        },
+    },
 });
 export default sequelize;
