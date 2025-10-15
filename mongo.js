@@ -85,7 +85,7 @@ const insertOne = async (collectionName, doc, auditInfo = null) => {
  */
 const deleteOne = async (collectionName, id, auditInfo = null) => {
   const db = await getInstance();
-  const doc = await findOne(collectionName, id);
+  const doc = await findById(collectionName, id);
   if (!doc) return false;
   if (auditInfo) auditLog('delete', collectionName, { doc, ...auditInfo });
   const result = await db.collection(collectionName).deleteOne({ id: id });
@@ -103,7 +103,7 @@ const deleteOne = async (collectionName, id, auditInfo = null) => {
  */
 const updateOne = async (collectionName, id, update, auditInfo = null) => {
   const db = await getInstance();
-  const doc = await findOne(collectionName, id);
+  const doc = await findById(collectionName, id);
   if (!doc) return false;
   if (auditInfo) auditLog('update', collectionName, { doc, set: update, ...auditInfo });
   const result = await db.collection(collectionName).updateOne({ id: id }, { $set: update });
