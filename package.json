@@ -1,32 +1,33 @@
 {
-    "name": "yujf-utils",
-    "version": "3.0.15",
-    "description": "A collection of utility functions for Node.js projects.",
-    "author": {
-        "name": "yujinfeng",
-        "email": "yujf1007@gmail.com"
-    },
-    "module": "index.js",
-    "type": "module",
-    "private": false,
-    "publishConfig": {
-        "access": "public"
-    },
-    "imports": {
-        "#utils": "./index.js"
-    },
-    "devDependencies": {
-        "@types/bun": "^1.2.22"
-    },
-    "dependencies": {
-        "@sequelize/core": "^7.0.0-alpha.46",
-        "@sequelize/postgres": "^7.0.0-alpha.46",
-        "amqplib": "^0.10.9",
-        "etcd3": "^1.1.2",
-        "mockjs-extend": "^1.7.1",
-        "mongodb": "^6.19.0",
-        "tencentcloud-sdk-nodejs": "^4.1.112",
-        "yaml": "^2.8.1",
-        "zod": "^4.1.12"
-    }
+  "name": "yujf-utils",
+  "version": "3.0.16",
+  "description": "A collection of utility functions for Node.js projects.",
+  "author": {
+    "name": "yujinfeng",
+    "email": "yujf1007@gmail.com"
+  },
+  "module": "index.js",
+  "type": "module",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "imports": {
+    "#utils": "./index.js"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.22",
+    "@types/mongodb": "^4.0.7"
+  },
+  "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.46",
+    "@sequelize/postgres": "^7.0.0-alpha.46",
+    "amqplib": "^0.10.9",
+    "etcd3": "^1.1.2",
+    "mockjs-extend": "^1.7.1",
+    "mongodb": "^6.19.0",
+    "tencentcloud-sdk-nodejs": "^4.1.112",
+    "yaml": "^2.8.1",
+    "zod": "^4.1.12"
+  }
 }

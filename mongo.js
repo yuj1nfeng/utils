@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient, ObjectId, Collection } from 'mongodb';
 
 let instance = null;
 
@@ -223,7 +223,7 @@ const dropTable = async (collectionName) => {
 /**
  * 获取集合
  * @param {string} collectionName - 集合名称
- * @returns {Promise<boolean>} 删除成功返回 true
+ * @returns {Promise<Collection>} 删除成功返回 true
  * @throws {Error} 如果删除失败或参数无效
  */
 const table = async (collectionName) => {
