@@ -208,6 +208,17 @@ const aggregate = async (collectionName, pipeline) => {
   return db.collection(collectionName).aggregate(pipeline).toArray();
 };
 
+/** 统计文档数量
+ * @param {string} collectionName - 集合名称
+ * @param {Object} [filter={}] - 查询条件
+ * @returns {Promise<number>} 文档数量
+ * @throws {Error} 如果统计失败或参数无效
+ */
+const count = async (collectionName, filter = {}) => {
+  const db = await getInstance();
+  return db.collection(collectionName).countDocuments(filter);
+};
+
 /**
  * 删除集合
  * @param {string} collectionName - 集合名称
@@ -246,6 +257,7 @@ export default {
   paginate,
   query,
   aggregate,
+  count,
   dropTable,
   table,
 };
