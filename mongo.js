@@ -1,5 +1,4 @@
 import { MongoClient, ObjectId } from 'mongodb';
-if (!process.env['MONGO_URL']) throw new Error('environment variable MONGO_URL is not set');
 
 let instance = null;
 
@@ -9,9 +8,11 @@ let instance = null;
  * @throws {Error} 如果连接失败或环境变量未设置
  */
 const newClient = async () => {
-    let client = new MongoClient(process.env['MONGO_URL'], { maxPoolSize: 10, minPoolSize: 1, retryWrites: true });
-    await client.connect();
-    return client;
+  const url = process.env['MONGO_URL'];
+  if (!url) throw new Error('environment variable MONGO_URL is not set');
+  let client = new MongoClient(url, { maxPoolSize: 10, minPoolSize: 1, retryWrites: true });
+  await client.connect();
+  return client;
 };
 
 /**
@@ -20,11 +21,11 @@ const newClient = async () => {
  * @throws {Error} 如果连接失败或环境变量未设置
  */
 const getInstance = async () => {
-    if (!instance) {
-        let client = await newClient();
-        instance = client.db();
-    }
-    return instance;
+  if (!instance) {
+    let client = await newClient();
+    instance = client.db();
+  }
+  return instance;
 };
 
 /**
@@ -33,10 +34,10 @@ const getInstance = async () => {
  * @throws {Error} 如果关闭连接时发生错误
  */
 const close = async () => {
-    if (instance) {
-        await instance.client.close();
-        instance = null;
-    }
+  if (instance) {
+    await instance.client.close();
+    instance = null;
+  }
 };
 
 /**
@@ -48,8 +49,8 @@ const close = async () => {
  * @throws {Error} 如果记录日志失败
  */
 const auditLog = async (action, collectionName, detail) => {
-    const db = await getInstance();
-    await db.collection('audit_log').insertOne({ action, collection: collectionName, timestamp: new Date(), ...detail });
+  const db = await getInstance();
+  await db.collection('audit_log').insertOne({ action, collection: collectionName, timestamp: new Date(), ...detail });
 };
 
 /**
@@ -61,17 +62,17 @@ const auditLog = async (action, collectionName, detail) => {
  * @throws {Error} 如果插入失败或参数无效
  */
 const insertOne = async (collectionName, doc, auditInfo = null) => {
-    const db = await getInstance();
-    const objid = ObjectId.createFromHexString(Bun.randomUUIDv7().replace(/-/g, '').substring(0, 24));
-    if (!doc.id) doc.id = objid.toString();
-    doc._id = objid;
+  const db = await getInstance();
+  const objid = ObjectId.createFromHexString(Bun.randomUUIDv7().replace(/-/g, '').substring(0, 24));
+  if (!doc.id) doc.id = objid.toString();
+  doc._id = objid;
 
-    const count = await db.collection(collectionName).countDocuments({ id: doc.id });
-    if (count > 0) return false;
-    const result = await db.collection(collectionName).insertOne(doc);
-    if (auditInfo) auditLog('insert', collectionName, { doc: result, ...auditInfo });
-    delete doc._id;
-    return doc;
+  const count = await db.collection(collectionName).countDocuments({ id: doc.id });
+  if (count > 0) return false;
+  const result = await db.collection(collectionName).insertOne(doc);
+  if (auditInfo) auditLog('insert', collectionName, { doc: result, ...auditInfo });
+  delete doc._id;
+  return doc;
 };
 
 /**
@@ -83,12 +84,12 @@ const insertOne = async (collectionName, doc, auditInfo = null) => {
  * @throws {Error} 如果删除失败或参数无效
  */
 const deleteOne = async (collectionName, id, auditInfo = null) => {
-    const db = await getInstance();
-    const doc = await findOne(collectionName, id);
-    if (!doc) return false;
-    if (auditInfo) auditLog('delete', collectionName, { doc, ...auditInfo });
-    const result = await db.collection(collectionName).deleteOne({ id: id });
-    return result.deletedCount > 0;
+  const db = await getInstance();
+  const doc = await findOne(collectionName, id);
+  if (!doc) return false;
+  if (auditInfo) auditLog('delete', collectionName, { doc, ...auditInfo });
+  const result = await db.collection(collectionName).deleteOne({ id: id });
+  return result.deletedCount > 0;
 };
 
 /**
@@ -101,12 +102,12 @@ const deleteOne = async (collectionName, id, auditInfo = null) => {
  * @throws {Error} 如果更新失败或参数无效
  */
 const updateOne = async (collectionName, id, update, auditInfo = null) => {
-    const db = await getInstance();
-    const doc = await findOne(collectionName, id);
-    if (!doc) return false;
-    if (auditInfo) auditLog('update', collectionName, { doc, set: update, ...auditInfo });
-    const result = await db.collection(collectionName).updateOne({ id: id }, { $set: update });
-    return result.modifiedCount > 0;
+  const db = await getInstance();
+  const doc = await findOne(collectionName, id);
+  if (!doc) return false;
+  if (auditInfo) auditLog('update', collectionName, { doc, set: update, ...auditInfo });
+  const result = await db.collection(collectionName).updateOne({ id: id }, { $set: update });
+  return result.modifiedCount > 0;
 };
 
 /**
@@ -116,13 +117,29 @@ const updateOne = async (collectionName, id, update, auditInfo = null) => {
  * @returns {Promise<Object|null>} 查询到的文档，如果未找到则返回 null
  * @throws {Error} 如果查询失败或参数无效
  */
-const findOne = async (collectionName, id) => {
-    const db = await getInstance();
-    const doc = await db.collection(collectionName).findOne({ id: id });
-    if (!doc) return null;
-    const new_id = doc._id.toString();
-    delete doc._id;
-    return { id: new_id, ...doc };
+const findById = async (collectionName, id) => {
+  const db = await getInstance();
+  const doc = await db.collection(collectionName).findOne({ id: id });
+  if (!doc) return null;
+  const new_id = doc._id.toString();
+  delete doc._id;
+  return { id: new_id, ...doc };
+};
+
+/**
+ * 查询一条文档
+ * @param {string} collectionName - 集合名称
+ * @param {object} filter - 查询条件
+ * @returns {Promise<Object|null>} 查询到的文档，如果未找到则返回 null
+ * @throws {Error} 如果查询失败或参数无效
+ */
+const findOne = async (collectionName, filter = {}) => {
+  const db = await getInstance();
+  const doc = await db.collection(collectionName).findOne(filter);
+  if (!doc) return null;
+  const new_id = doc._id.toString();
+  delete doc._id;
+  return { id: new_id, ...doc };
 };
 
 /**
@@ -135,11 +152,11 @@ const findOne = async (collectionName, id) => {
  * @throws {Error} 如果查询失败或参数无效
  */
 const paginate = async (collectionName, filter = {}, limit = 10, skip = 0) => {
-    const db = await getInstance();
-    const count = await db.collection(collectionName).countDocuments(filter);
-    const cursor = db.collection(collectionName).find(filter).skip(skip).limit(limit);
-    const list = await cursor.toArray();
-    return { total: count, rows: list };
+  const db = await getInstance();
+  const count = await db.collection(collectionName).countDocuments(filter);
+  const cursor = db.collection(collectionName).find(filter).skip(skip).limit(limit);
+  const list = await cursor.toArray();
+  return { total: count, rows: list };
 };
 
 /**
@@ -150,10 +167,10 @@ const paginate = async (collectionName, filter = {}, limit = 10, skip = 0) => {
  * @throws {Error} 如果查询失败或参数无效
  */
 const query = async (collectionName, filter = {}) => {
-    const db = await getInstance();
-    const cursor = db.collection(collectionName).find(filter);
-    const list = await cursor.toArray();
-    return list;
+  const db = await getInstance();
+  const cursor = db.collection(collectionName).find(filter);
+  const list = await cursor.toArray();
+  return list;
 };
 
 /**
@@ -163,8 +180,8 @@ const query = async (collectionName, filter = {}) => {
  * @returns
  */
 const insertMany = async (collectionName, docs) => {
-    const db = await getInstance();
-    return db.collection(collectionName).insertMany(docs);
+  const db = await getInstance();
+  return db.collection(collectionName).insertMany(docs);
 };
 
 /**
@@ -175,8 +192,8 @@ const insertMany = async (collectionName, docs) => {
  * @throws {Error} 如果批量操作失败或参数无效
  */
 const bulkWrite = async (collectionName, operations) => {
-    const db = await getInstance();
-    return db.collection(collectionName).bulkWrite(operations);
+  const db = await getInstance();
+  return db.collection(collectionName).bulkWrite(operations);
 };
 
 /**
@@ -187,8 +204,8 @@ const bulkWrite = async (collectionName, operations) => {
  * @throws {Error} 如果聚合查询失败或参数无效
  */
 const aggregate = async (collectionName, pipeline) => {
-    const db = await getInstance();
-    return db.collection(collectionName).aggregate(pipeline).toArray();
+  const db = await getInstance();
+  return db.collection(collectionName).aggregate(pipeline).toArray();
 };
 
 /**
@@ -198,22 +215,37 @@ const aggregate = async (collectionName, pipeline) => {
  * @throws {Error} 如果删除失败或参数无效
  */
 const dropTable = async (collectionName) => {
-    const db = await getInstance();
-    const result = await db.collection(collectionName).drop();
-    return result;
+  const db = await getInstance();
+  const result = await db.collection(collectionName).drop();
+  return result;
+};
+
+/**
+ * 获取集合
+ * @param {string} collectionName - 集合名称
+ * @returns {Promise<boolean>} 删除成功返回 true
+ * @throws {Error} 如果删除失败或参数无效
+ */
+const table = async (collectionName) => {
+  const db = await getInstance();
+  const result = await db.collection(collectionName);
+  return result;
 };
 
 export default {
-    newClient,
-    getInstance,
-    close,
-    insertOne,
-    insertMany,
-    deleteOne,
-    updateOne,
-    findOne,
-    paginate,
-    query,
-    aggregate,
-    dropTable,
+  newClient,
+  getInstance,
+  close,
+  insertOne,
+  insertMany,
+  bulkWrite,
+  deleteOne,
+  updateOne,
+  findById,
+  findOne,
+  paginate,
+  query,
+  aggregate,
+  dropTable,
+  table,
 };

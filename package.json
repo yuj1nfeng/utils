@@ -1,7 +1,7 @@
 {
     "name": "yujf-utils",
-    "version": "3.0.14",
-    "description": "koa router loader",
+    "version": "3.0.15",
+    "description": "A collection of utility functions for Node.js projects.",
     "author": {
         "name": "yujinfeng",
         "email": "yujf1007@gmail.com"
