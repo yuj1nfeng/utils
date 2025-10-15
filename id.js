@@ -1,3 +1,3 @@
 export default {
-    uuid: () => Bun.randomUUIDv7(),
+  uuid: () => Bun.randomUUIDv7(),
 };

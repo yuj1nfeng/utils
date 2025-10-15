@@ -1,0 +1,6 @@
+# 示例 .prettierignore 内容
+node_modules/
+dist/
+build/
+*.log
+.DS_Store

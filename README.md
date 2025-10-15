@@ -45,10 +45,10 @@ console.log(JSON.parse(data));
 // 使用分布式锁
 const lock = await utils.etcd.lock('resource-lock', 30);
 try {
-    // 执行临界区操作
-    console.log('Lock acquired');
+  // 执行临界区操作
+  console.log('Lock acquired');
 } finally {
-    await lock.release();
+  await lock.release();
 }
 ```
 
@@ -149,15 +149,15 @@ await producer.publish('my-queue', { message: 'Hello RabbitMQ' });
 
 // 批量发布
 await producer.publishBatch('my-queue', [
-    { id: 1, content: 'Message 1' },
-    { id: 2, content: 'Message 2' },
+  { id: 1, content: 'Message 1' },
+  { id: 2, content: 'Message 2' },
 ]);
 
 // 消费者示例
 const consumer = new utils.rabbit.RabbitMQConsumer();
 await consumer.consume('my-queue', (msg) => {
-    console.log('Received message:', msg);
-    return true; // 确认消息
+  console.log('Received message:', msg);
+  return true; // 确认消息
 });
 
 // 获取队列信息
@@ -244,8 +244,8 @@ const sequelize = utils.sequelize;
 // 使用模型
 const User = sequelize.models.User;
 const newUser = await User.create({
-    name: 'John Doe',
-    email: 'john@example.com',
+  name: 'John Doe',
+  email: 'john@example.com',
 });
 
 // 查询数据
@@ -298,17 +298,17 @@ import utils from '#utils';
 
 // 生成创建表SQL
 const createSql = utils.sql.generateCreateTableSql('users', [
-    { name: 'id', type: 'INT', primaryKey: true, autoIncrement: true },
-    { name: 'name', type: 'VARCHAR(100)', notNull: true },
-    { name: 'email', type: 'VARCHAR(255)', unique: true },
+  { name: 'id', type: 'INT', primaryKey: true, autoIncrement: true },
+  { name: 'name', type: 'VARCHAR(100)', notNull: true },
+  { name: 'email', type: 'VARCHAR(255)', unique: true },
 ]);
 console.log('Create table SQL:', createSql);
 
 // 生成添加列SQL
 const addColumnSql = utils.sql.generateAddColumnSql('users', {
-    name: 'age',
-    type: 'INT',
-    defaultValue: 0,
+  name: 'age',
+  type: 'INT',
+  defaultValue: 0,
 });
 console.log('Add column SQL:', addColumnSql);
 ```
@@ -331,16 +331,16 @@ const validate = utils.createYamlValidator('./validation-rules.yml');
 
 // 验证数据
 const data = {
-    name: 'John Doe',
-    email: 'john@example.com',
-    age: 30,
+  name: 'John Doe',
+  email: 'john@example.com',
+  age: 30,
 };
 
 const isValid = validate(data);
 if (!isValid) {
-    console.log('Validation errors:', validate.errors);
+  console.log('Validation errors:', validate.errors);
 } else {
-    console.log('Data is valid');
+  console.log('Data is valid');
 }
 ```
 

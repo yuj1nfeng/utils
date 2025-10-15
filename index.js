@@ -17,23 +17,23 @@ import genSeqSchema from './cmd/gen.seq.schema.js';
 import genMockTemplate from './cmd/gen.mock.template.js';
 
 export default {
-    etcd,
-    mongo,
-    rabbit,
-    redis,
-    sql,
-    s3,
-    sms,
-    sequelize,
-    mk,
-    id,
-    deepseek,
-    logger,
-    cmd: {
-        buildSeqFilter,
-        buildMongoFilter,
-        genZodSchema,
-        genSeqSchema,
-        genMockTemplate
-    },
+  etcd,
+  mongo,
+  rabbit,
+  redis,
+  sql,
+  s3,
+  sms,
+  sequelize,
+  mk,
+  id,
+  deepseek,
+  logger,
+  cmd: {
+    buildSeqFilter,
+    buildMongoFilter,
+    genZodSchema,
+    genSeqSchema,
+    genMockTemplate,
+  },
 };

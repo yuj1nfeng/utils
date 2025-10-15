@@ -11,13 +11,13 @@ import { S3Client } from 'bun';
  * 创建 S3客户端实例
  */
 export const client = new S3Client({
-    accessKeyId: process.env['S3_ACCESS_KEY'],
-    secretAccessKey: process.env['S3_SECRET_KEY'],
-    bucket: process.env['S3_BUCKET'],
-    region: process.env['S3_REGION'],
-    endpoint: process.env['S3_ENDPOINT'],
-    forcePathStyle: true,
-    // virtualHostedStyle: true,
+  accessKeyId: process.env['S3_ACCESS_KEY'],
+  secretAccessKey: process.env['S3_SECRET_KEY'],
+  bucket: process.env['S3_BUCKET'],
+  region: process.env['S3_REGION'],
+  endpoint: process.env['S3_ENDPOINT'],
+  forcePathStyle: true,
+  // virtualHostedStyle: true,
 });
 /**
  * 获取文件的公开访问URL
@@ -25,7 +25,7 @@ export const client = new S3Client({
  * @returns {string} 文件的公开访问URL
  */
 function getPublicUrl(key) {
-    return `${process.env['S3_ENDPOINT']}/${process.env['S3_BUCKET']}/${key}`;
+  return `${process.env['S3_ENDPOINT']}/${process.env['S3_BUCKET']}/${key}`;
 }
 
 /**
@@ -34,8 +34,8 @@ function getPublicUrl(key) {
  * @returns {S3File} S3文件对象
  */
 function getS3File(key) {
-    const s3file = client.file(key);
-    return s3file;
+  const s3file = client.file(key);
+  return s3file;
 }
 
 /**
@@ -44,9 +44,9 @@ function getS3File(key) {
  * @returns {Promise<string>} 文件文本内容
  */
 async function getText(key) {
-    const s3file = getS3File(key);
-    const text = await s3file.text();
-    return text;
+  const s3file = getS3File(key);
+  const text = await s3file.text();
+  return text;
 }
 
 /**
@@ -55,7 +55,7 @@ async function getText(key) {
  * @param {string} data 要上传的文本内容
  */
 async function put(key, data, options = { acl: 'public-read' }) {
-    await client.write(key, data, { type: 'text/plain', ...options });
+  await client.write(key, data, { type: 'text/plain', ...options });
 }
 
 /**
@@ -65,36 +65,36 @@ async function put(key, data, options = { acl: 'public-read' }) {
  * @param {Object} options 上传选项
  */
 async function putFile(key, file, options = { acl: 'public-read' }) {
-    let buf = file instanceof ArrayBuffer ? file : await Bun.file(file).arrayBuffer();
+  let buf = file instanceof ArrayBuffer ? file : await Bun.file(file).arrayBuffer();
 
-    // 小文件直接上传（小于50MB）
-    if (buf.byteLength <= 1024 * 1024 * 50) {
-        await client.write(key, buf, { ...options });
-        return;
-    }
+  // 小文件直接上传（小于50MB）
+  if (buf.byteLength <= 1024 * 1024 * 50) {
+    await client.write(key, buf, { ...options });
+    return;
+  }
 
-    // 大文件分片上传
-    const s3file = client.file(key);
-    const chunkSize = 1024 * 1024 * 50; // 每片50MB
-    const writer = s3file.writer({
-        retry: 3, // 重试次数
-        queueSize: 10, // 队列大小
-        partSize: chunkSize, // 分片大小
-        ...options,
-    });
+  // 大文件分片上传
+  const s3file = client.file(key);
+  const chunkSize = 1024 * 1024 * 50; // 每片50MB
+  const writer = s3file.writer({
+    retry: 3, // 重试次数
+    queueSize: 10, // 队列大小
+    partSize: chunkSize, // 分片大小
+    ...options,
+  });
 
-    const totalSize = buf.byteLength;
-    let uploadedSize = 0;
+  const totalSize = buf.byteLength;
+  let uploadedSize = 0;
 
-    // 分片上传
-    for (let i = 0; i < totalSize; i += chunkSize) {
-        const chunk = buf.slice(i, i + chunkSize);
-        writer.write(chunk);
-        uploadedSize += chunk.byteLength;
-        await writer.flush();
-    }
+  // 分片上传
+  for (let i = 0; i < totalSize; i += chunkSize) {
+    const chunk = buf.slice(i, i + chunkSize);
+    writer.write(chunk);
+    uploadedSize += chunk.byteLength;
+    await writer.flush();
+  }
 
-    await writer.end();
+  await writer.end();
 }
 
 /**
@@ -103,8 +103,8 @@ async function putFile(key, file, options = { acl: 'public-read' }) {
  * @returns {Promise<boolean>} 文件是否存在
  */
 async function exists(key) {
-    const result = await client.exists(key);
-    return result;
+  const result = await client.exists(key);
+  return result;
 }
 
 /**
@@ -113,8 +113,8 @@ async function exists(key) {
  * @returns {Promise<Object>} 文件元信息
  */
 async function stat(key) {
-    const result = await client.stat(key);
-    return result;
+  const result = await client.stat(key);
+  return result;
 }
 
 /**
@@ -124,8 +124,8 @@ async function stat(key) {
  * @returns {Promise<Object>} 文件列表
  */
 async function list(prefix = '', maxKeys = 1000) {
-    const result = await client.list({ prefix: prefix, maxKeys: maxKeys });
-    return result;
+  const result = await client.list({ prefix: prefix, maxKeys: maxKeys });
+  return result;
 }
 
 /**
@@ -134,7 +134,7 @@ async function list(prefix = '', maxKeys = 1000) {
  * @returns {Promise<Object>} 删除结果
  */
 async function del(key) {
-    await client.delete(key);
+  await client.delete(key);
 }
 
 /**
@@ -143,19 +143,19 @@ async function del(key) {
  * @returns {Promise<Object>} 删除结果
  */
 async function unlink(key) {
-    await client.unlink(key);
+  await client.unlink(key);
 }
 // 导出所有方法
 export default {
-    client,
-    getPublicUrl,
-    getS3File,
-    getText,
-    put,
-    putFile,
-    exists,
-    stat,
-    list,
-    del,
-    unlink,
+  client,
+  getPublicUrl,
+  getS3File,
+  getText,
+  put,
+  putFile,
+  exists,
+  stat,
+  list,
+  del,
+  unlink,
 };

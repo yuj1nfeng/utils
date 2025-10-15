@@ -13,33 +13,35 @@ import YAML from 'yaml';
  * @throws {Error} 如果数据库连接失败或读取表结构失败
  */
 export default async function (options) {
-    const { outputDir, databaseUrl, dialect, excludeTables = [] } = options;
-    await fs.mkdir(outputDir, { recursive: true });
-    const logging = (sql, _) => console.log(sql.replace('Executing (default):', '📈📈📈 '));
-    const sequelize = new Sequelize({ url: databaseUrl, dialect: dialect, logging: logging });
-    await sequelize.authenticate();
-    const query = sequelize.getQueryInterface();
-    const all_tables = await query.listTables();
-    // 过滤排除的表
-    const tables = all_tables.filter((t) => !excludeTables.includes(t));
-    for (const table of tables) {
-        const table_schema = await query.describeTable(table.tableName);
-        const indexes = await query.showIndex(table.tableName);
-        const [result] = await sequelize.query(`SELECT obj_description('${table.schema}."${table.tableName}"'::regclass, 'pg_class') as comment;`, { type: sequelize.QueryTypes.SELECT });
-        const data = {
-            model_name: table.tableName,
-            comment: result ? result.comment : '',
-            options: { modelName: table.tableName, tableName: table.tableName, comment: ``, createdAt: false, updatedAt: false, indexes: indexes },
+  const { outputDir, databaseUrl, dialect, excludeTables = [] } = options;
+  await fs.mkdir(outputDir, { recursive: true });
+  const logging = (sql, _) => console.log(sql.replace('Executing (default):', '📈📈📈 '));
+  const sequelize = new Sequelize({ url: databaseUrl, dialect: dialect, logging: logging });
+  await sequelize.authenticate();
+  const query = sequelize.getQueryInterface();
+  const all_tables = await query.listTables();
+  // 过滤排除的表
+  const tables = all_tables.filter((t) => !excludeTables.includes(t));
+  for (const table of tables) {
+    const table_schema = await query.describeTable(table.tableName);
+    const indexes = await query.showIndex(table.tableName);
+    const [result] = await sequelize.query(`SELECT obj_description('${table.schema}."${table.tableName}"'::regclass, 'pg_class') as comment;`, {
+      type: sequelize.QueryTypes.SELECT,
+    });
+    const data = {
+      model_name: table.tableName,
+      comment: result ? result.comment : '',
+      options: { modelName: table.tableName, tableName: table.tableName, comment: ``, createdAt: false, updatedAt: false, indexes: indexes },
 
-            attributes: {},
-        };
-        for (const [column_name, column_info] of Object.entries(table_schema)) {
-            data.attributes[column_name] = { ...column_info };
-        }
-        const output_file = path.join(outputDir, `${table.tableName}.yml`);
-        await fs.writeFile(output_file, YAML.stringify(data), 'utf8');
-        console.log(`Generated schema for table: ${table.tableName}`);
+      attributes: {},
     };
-    console.log('Schema generation completed.');
-    await sequelize.close(); // 关闭数据库连接
+    for (const [column_name, column_info] of Object.entries(table_schema)) {
+      data.attributes[column_name] = { ...column_info };
+    }
+    const output_file = path.join(outputDir, `${table.tableName}.yml`);
+    await fs.writeFile(output_file, YAML.stringify(data), 'utf8');
+    console.log(`Generated schema for table: ${table.tableName}`);
+  }
+  console.log('Schema generation completed.');
+  await sequelize.close(); // 关闭数据库连接
 }

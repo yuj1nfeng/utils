@@ -9,10 +9,10 @@ const sql = new SQL(process.env['POSTGRES_URL']);
  * @returns {string} The generated CREATE TABLE SQL statement.
  */
 export const generateCreateTableSql = (tableName, schema) => {
-    const columns = Object.entries(schema)
-        .map(([columnName, definition]) => `${columnName} ${definition}`)
-        .join(', ');
-    return `CREATE TABLE ${tableName} (${columns});`;
+  const columns = Object.entries(schema)
+    .map(([columnName, definition]) => `${columnName} ${definition}`)
+    .join(', ');
+  return `CREATE TABLE ${tableName} (${columns});`;
 };
 
 /**
@@ -23,7 +23,7 @@ export const generateCreateTableSql = (tableName, schema) => {
  * @returns {string} The generated ALTER TABLE SQL statement.
  */
 export const generateAddColumnSql = (tableName, columnName, definition) => {
-    return `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition};`;
+  return `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition};`;
 };
 
 /**
@@ -34,7 +34,7 @@ export const generateAddColumnSql = (tableName, columnName, definition) => {
  * @returns {string} The generated ALTER TABLE SQL statement.
  */
 export const generateModifyColumnSql = (tableName, columnName, newDefinition) => {
-    return `ALTER TABLE ${tableName} ALTER COLUMN ${columnName} TYPE ${newDefinition};`;
+  return `ALTER TABLE ${tableName} ALTER COLUMN ${columnName} TYPE ${newDefinition};`;
 };
 
 export default sql;
