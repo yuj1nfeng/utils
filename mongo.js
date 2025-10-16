@@ -93,6 +93,23 @@ const deleteOne = async (collectionName, id, auditInfo = null) => {
 };
 
 /**
+ * 批量删除文档
+ * @param {string} collectionName - 集合名称
+ * @param {Object} filter - 查询条件
+ * @param {Object} [auditInfo=null] - 审计日志信息（可选）
+ * @returns {Promise<boolean>} 删除成功返回 true，文档不存在返回 false
+ * @throws {Error} 如果删除失败或参数无效
+ */
+const deleteMany = async (collectionName, filter = {}, auditInfo = null) => {
+  const db = await getInstance();
+  const docs = await query(collectionName, filter);
+  if (!docs || docs.length === 0) return false;
+  if (auditInfo) auditLog('delete', collectionName, { docs, ...auditInfo });
+  const result = await db.collection(collectionName).deleteMany({ id: { $in: docs.map((doc) => doc.id) } });
+  return result.deletedCount > 0;
+};
+
+/**
  * 根据 ID 更新一条文档
  * @param {string} collectionName - 集合名称
  * @param {string} id - 文档 ID
@@ -101,12 +118,47 @@ const deleteOne = async (collectionName, id, auditInfo = null) => {
  * @returns {Promise<boolean>} 更新成功返回 true，文档不存在返回 false
  * @throws {Error} 如果更新失败或参数无效
  */
-const updateOne = async (collectionName, id, update, auditInfo = null) => {
+const updateById = async (collectionName, id, update, auditInfo = null) => {
   const db = await getInstance();
   const doc = await findById(collectionName, id);
   if (!doc) return false;
   if (auditInfo) auditLog('update', collectionName, { doc, set: update, ...auditInfo });
   const result = await db.collection(collectionName).updateOne({ id: id }, { $set: update });
+  return result.modifiedCount > 0;
+};
+
+/**
+ * 更新一条文档
+ * @param {string} collectionName - 集合名称
+ * @param {Object} filter - 查询条件
+ * @param {Object} update - 更新操作（如 $set, $inc 等）
+ * @param {Object} [auditInfo=null] - 审计日志信息（可选）
+ * @returns {Promise<boolean>} 更新成功返回 true，文档不存在返回 false
+ * @throws {Error} 如果更新失败或参数无效
+ */
+const updateOne = async (collectionName, filter, update, auditInfo = null) => {
+  const db = await getInstance();
+  const doc = await findOne(collectionName, filter);
+  if (!doc) return false;
+  if (auditInfo) auditLog('update', collectionName, { doc, set: update, ...auditInfo });
+  const result = await db.collection(collectionName).updateOne({ id: doc.id }, { $set: update });
+  return result.modifiedCount > 0;
+};
+/**
+ * 批量更新文档
+ * @param {string} collectionName - 集合名称
+ * @param {Object} filter - 查询条件
+ * @param {Object} update - 更新操作（如 $set, $inc 等）
+ * @param {Object} [auditInfo=null] - 审计日志信息（可选）
+ * @returns {Promise<boolean>} 更新成功返回 true，文档不存在返回 false
+ * @throws {Error} 如果更新失败或参数无效
+ */
+const updateMany = async (collectionName, filter, update, auditInfo = null) => {
+  const db = await getInstance();
+  const docs = await query(collectionName, filter);
+  if (!docs || docs.length === 0) return false;
+  if (auditInfo) auditLog('update', collectionName, { docs, set: update, ...auditInfo });
+  const result = await db.collection(collectionName).updateMany({ id: { $in: docs.map((doc) => doc.id) } }, { $set: update });
   return result.modifiedCount > 0;
 };
 
@@ -251,7 +303,10 @@ export default {
   insertMany,
   bulkWrite,
   deleteOne,
+  deleteMany,
+  updateById,
   updateOne,
+  updateMany,
   findById,
   findOne,
   paginate,
