@@ -83,7 +83,7 @@ const insertOne = async (collectionName, doc, auditInfo = null) => {
  * @returns {Promise<boolean>} 删除成功返回 true，文档不存在返回 false
  * @throws {Error} 如果删除失败或参数无效
  */
-const deleteOne = async (collectionName, id, auditInfo = null) => {
+const deleteById = async (collectionName, id, auditInfo = null) => {
   const db = await getInstance();
   const doc = await findById(collectionName, id);
   if (!doc) return false;
@@ -302,7 +302,7 @@ export default {
   insertOne,
   insertMany,
   bulkWrite,
-  deleteOne,
+  deleteById,
   deleteMany,
   updateById,
   updateOne,
